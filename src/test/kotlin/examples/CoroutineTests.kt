@@ -48,6 +48,22 @@ class CoroutineTests : CoroutineScope {
         println("Received result")
         assert(result == "hello world")
     }
+    @Test
+    fun `coroutines are async - demo power assist`() {
+        var result: String? = null
+
+        runBlocking {
+            launch { result = longRunningTask() }
+            println("Launched!")
+        }
+
+        println("Received result")
+        val error = assertFailsWith<AssertionError> {
+            assert(result != "hello world")
+        }
+
+        println(error.message)
+    }
 
     @Test
     fun `lightweight coroutines`() = runBlocking {
